@@ -12,7 +12,7 @@ public class Constants {
 
     // ------------------------------------------------------------------------
     // API JSON KEY
-    public static final String  TMDB_API_KEY            = "09bfc8564818434e8872ac6c06c1ae25";
+    public static final String  TMDB_API_KEY            = "Please replace your key api here!";
 
     // TMDB Base URL
     public static final String  TMDB_IMAGE_BASE_URL     = "http://image.tmdb.org/t/p/";
