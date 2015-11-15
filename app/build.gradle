@@ -69,6 +69,9 @@ dependencies {
     compile 'com.squareup.picasso:picasso:2.5.2'
     compile 'com.squareup.retrofit:retrofit:1.5.1'
     compile 'com.google.code.gson:gson:2.2.4'
+
+    compile "org.parceler:parceler-api:1.0.4"
+    apt "org.parceler:parceler:1.0.4"
 }
 
 apt {

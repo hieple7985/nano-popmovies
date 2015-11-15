@@ -63,7 +63,7 @@ public class DiscoverAdapter extends ArrayAdapter<MovieVO> {
             mHolder = (ViewHolder) convertView.getTag();
         }
 
-        Picasso.with(getContext()).load(movieVO.mThumbnailsURL).into(mHolder.mIvPoster);
+        Picasso.with(getContext()).load(movieVO.getThumbnailsURL()).into(mHolder.mIvPoster);
 
         convertView.setTag(mHolder);
 
