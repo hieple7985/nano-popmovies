@@ -26,8 +26,8 @@ import hieplt.popularmovie.bases.PopMovieActivityBase;
 import hieplt.popularmovie.commons.Constants;
 import hieplt.popularmovie.models.gsons.DiscoverMovieGSON;
 import hieplt.popularmovie.models.vos.MovieVO;
-import hieplt.popularmovie.services.rests.TMDBDiscoverBuilder;
-import hieplt.popularmovie.services.rests.TMDBDiscoverService;
+import hieplt.popularmovie.services.rests.tmdb.TMDBDiscoverBuilder;
+import hieplt.popularmovie.services.rests.tmdb.TMDBDiscoverService;
 import retrofit.Callback;
 import retrofit.RetrofitError;
 import retrofit.client.Response;
@@ -108,6 +108,7 @@ public class DiscoverActivity extends PopMovieActivityBase {
                             .toString());
                     movieVO.setVoteAverage(String.valueOf(movieRawVO.mVoteAverage));
                     movieVO.setPlotSynopsis(movieRawVO.mOverview);
+                    movieVO.setId(movieRawVO.mId);
                     // I'm thinking about how to cache poster as drawable.
 
                     mMovieVOs.add(movieVO);

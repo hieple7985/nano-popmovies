@@ -21,6 +21,8 @@ public class MovieVO {
         public final static String mW780        = "w780";
     }
 
+    @ParcelProperty("id")
+    int mId;
     @ParcelProperty("title")
     String mTitle;
     @ParcelProperty("releaseDate")
@@ -35,8 +37,9 @@ public class MovieVO {
     public MovieVO() {}
 
     @ParcelConstructor
-    public MovieVO(String title, String releaseDate, String thumbnailsUrl
+    public MovieVO(int id, String title, String releaseDate, String thumbnailsUrl
             , String voteAverage, String plotSynopsis) {
+        this.mId = id;
         this.mTitle = title;
         this.mReleaseDate = releaseDate;
         this.mThumbnailsURL = thumbnailsUrl;
@@ -47,6 +50,16 @@ public class MovieVO {
     // ------------------------------------------------------------------------
     // Properties
     // ------------------------------------------------------------------------
+    @ParcelProperty("id")
+    public int getId() {
+        return mId;
+    }
+
+    @ParcelProperty("id")
+    public void setId(int mId) {
+        this.mId = mId;
+    }
+
     @ParcelProperty("title")
     public String getTitle() {
         return mTitle;

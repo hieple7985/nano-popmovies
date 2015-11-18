@@ -1,4 +1,4 @@
-package hieplt.popularmovie.services.rests;
+package hieplt.popularmovie.services.rests.tmdb;
 
 import java.util.Map;
 

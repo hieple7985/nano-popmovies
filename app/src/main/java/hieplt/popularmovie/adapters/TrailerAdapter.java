@@ -5,21 +5,19 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
-import android.widget.ImageView;
-
-import com.squareup.picasso.Picasso;
+import android.widget.TextView;
 
 import java.util.List;
 
 import hieplt.popularmovie.R;
-import hieplt.popularmovie.models.vos.MovieVO;
+import hieplt.popularmovie.models.vos.TrailerVO;
 
 /**
  * Created by HiepLT on 11/8/15.
  */
-public class DiscoverAdapter extends ArrayAdapter<MovieVO> {
+public class TrailerAdapter extends ArrayAdapter<TrailerVO> {
 
-    private static final String LOG_TAG = DiscoverAdapter.class.getSimpleName();
+    private static final String LOG_TAG = TrailerAdapter.class.getSimpleName();
 
     private ViewHolder mHolder;
 
@@ -29,10 +27,10 @@ public class DiscoverAdapter extends ArrayAdapter<MovieVO> {
      * to populate into the lists
      *
      * @param context        The current context. Used to inflate the layout file.
-     * @param movieVOes     A List of MovieVOes objects to display in a list
+     * @param TrailerVOes     A List of TrailerVOes objects to display in a list
      */
-    public DiscoverAdapter(Activity context, List<MovieVO> movieVOes) {
-        super(context, 0, movieVOes);
+    public TrailerAdapter(Activity context, List<TrailerVO> TrailerVOes) {
+        super(context, 0, TrailerVOes);
     }
 
     /**
@@ -47,7 +45,7 @@ public class DiscoverAdapter extends ArrayAdapter<MovieVO> {
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
         // Gets the MovieVO object from the ArrayAdapter at the appropriate position
-        MovieVO movieVO = getItem(position);
+        TrailerVO trailerVO = getItem(position);
 
         // Adapters recycle views to AdapterViews.
         // If this is a new View object we're getting, then inflate the layout.
@@ -55,22 +53,26 @@ public class DiscoverAdapter extends ArrayAdapter<MovieVO> {
         // and we modify the View widgets as usual.
         if (convertView == null) {
             convertView = LayoutInflater.from(getContext()).inflate(
-                    R.layout.item_discover_movie, parent, false);
+                    R.layout.item_movie_trailer, parent, false);
 
             mHolder = new ViewHolder();
-            mHolder.mIvPoster = (ImageView) convertView.findViewById(R.id.discovert_item_movie_thumnail);
+            mHolder.mTvName = (TextView) convertView.findViewById(R.id.item_movie_trailer_name);
+            mHolder.mTvSize = (TextView) convertView.findViewById(R.id.item_movie_trailer_size);
 
             convertView.setTag(mHolder);
         } else {
             mHolder = (ViewHolder) convertView.getTag();
         }
 
-        Picasso.with(getContext()).load(movieVO.getThumbnailsURL()).into(mHolder.mIvPoster);
+        mHolder.mTvName.setText(trailerVO.getName());
+        mHolder.mTvSize.setText(String.valueOf(trailerVO.getSize()));
 
         return convertView;
     }
 
     private class ViewHolder {
-        ImageView mIvPoster = null;
+        // ImageView mIvPlayIcon = null; // For future using
+        TextView mTvName;
+        TextView mTvSize;
     }
 }
