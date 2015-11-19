@@ -94,6 +94,8 @@ public class DetailActivity extends PopMovieActivityBase {
     @AfterViews
     void initViews() {
 
+        mContext = getApplicationContext();
+
         onSetupSupportActionBar(mToolbar);
 
         // Custom for detail movie screen
@@ -116,8 +118,6 @@ public class DetailActivity extends PopMovieActivityBase {
             mReviewAdapter = new ReviewAdapter(this, new ArrayList<ReviewVO>());
         }
         mlvReviews.setAdapter(mReviewAdapter);
-
-        mContext = getApplicationContext();
 
         // Load more detailed data.
         doLoadTrailersInBackground(movieVO.getId());
@@ -199,7 +199,7 @@ public class DetailActivity extends PopMovieActivityBase {
                 Log.i(LOG_TAG, gson.toString());
                 Log.i(LOG_TAG, response.toString());
 
-//                doTrailersUpdateUI();
+                doReviewsUpdateUI();
             }
 
             @Override
@@ -216,6 +216,7 @@ public class DetailActivity extends PopMovieActivityBase {
     void doTrailersUpdateUI() {
         mTrailerAdapter.clear();
         mTrailerAdapter.addAll(mTrailerVOs);
+        mTrailerAdapter.getCount();
         mTrailerAdapter.notifyDataSetChanged();
     }
 
