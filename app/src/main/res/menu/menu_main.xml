@@ -7,4 +7,7 @@
 
     <item android:id="@+id/action_high_rate" android:title="@string/action_high_rate"
         android:orderInCategory="100" app:showAsAction="never" />
+
+    <item android:id="@+id/action_favorite" android:title="@string/action_high_rate"
+        android:orderInCategory="100" app:showAsAction="never" />
 </menu>
