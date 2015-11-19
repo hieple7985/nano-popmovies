@@ -1,11 +1,17 @@
 package hieplt.popularmovie.activities;
 
+import android.content.ActivityNotFoundException;
+import android.content.Context;
+import android.content.Intent;
+import android.net.Uri;
 import android.util.Log;
 import android.view.Menu;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
 
+import com.google.android.youtube.player.YouTubeIntents;
+import com.google.android.youtube.player.YouTubeStandalonePlayer;
 import com.squareup.picasso.Picasso;
 
 import org.androidannotations.annotations.AfterViews;
@@ -44,6 +50,9 @@ import retrofit.client.Response;
 public class DetailActivity extends PopMovieActivityBase {
 
     private final static String LOG_TAG = DetailActivity.class.getSimpleName();
+
+    // Context
+    private Context mContext;
 
     // Services
     @Bean
@@ -107,6 +116,8 @@ public class DetailActivity extends PopMovieActivityBase {
             mReviewAdapter = new ReviewAdapter(this, new ArrayList<ReviewVO>());
         }
         mlvReviews.setAdapter(mReviewAdapter);
+
+        mContext = getApplicationContext();
 
         // Load more detailed data.
         doLoadTrailersInBackground(movieVO.getId());
@@ -218,9 +229,23 @@ public class DetailActivity extends PopMovieActivityBase {
     @ItemClick(R.id.lv_movie_trailers)
     void onMovieTrailerItemClicked(TrailerVO selectedTrailerVO) {
 
-//        Intent intent = new Intent(this, DetailActivity_.class);
-//        intent.putExtra(Constants.EXTRA_DISCOVER_MOVIE, Parcels.wrap(selectedTrailerVO));
-//        startActivity(intent);
+        if (YouTubeIntents.canResolvePlayVideoIntent(getApplicationContext())) {
+            String mDeveloperKey = "AIzaSyB2iBP-uPngxmVCA-90wMng_icb07EIr4U";
+            Intent intent = YouTubeStandalonePlayer
+                .createVideoIntent(this, mDeveloperKey, selectedTrailerVO.getKey());
+            startActivity(intent);
+        } else {
+            String videoId = selectedTrailerVO.getKey();
+
+            try {
+                Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse("vnd.youtube:" + videoId));
+                intent.putExtra("VIDEO_ID", videoId);
+                startActivity(intent);
+            } catch (ActivityNotFoundException ex) {
+                Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse("http://www.youtube.com/watch?v=" + videoId));
+                startActivity(intent);
+            }
+        }
     }
 
     @Override

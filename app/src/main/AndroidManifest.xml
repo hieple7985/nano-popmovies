@@ -3,6 +3,7 @@
     package="hieplt.popularmovie" >
 
     <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
 
     <application
         android:allowBackup="true"
@@ -19,7 +20,8 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".activities.DetailActivity_">
+        <activity android:name=".activities.DetailActivity_"
+            android:configChanges="orientation" >
 
             <!-- The meta-data element is needed for versions lower than 4.1 -->
             <meta-data
