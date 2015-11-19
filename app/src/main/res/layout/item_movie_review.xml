@@ -5,7 +5,7 @@
     <LinearLayout
         android:orientation="vertical"
         android:layout_width="match_parent"
-        android:layout_height="48dp"
+        android:layout_height="wrap_content"
         android:layout_margin="16dp"
         android:id="@+id/linearLayout2"
         android:layout_alignParentTop="true"
@@ -16,15 +16,16 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:textAppearance="?android:attr/textAppearanceMedium"
-            android:text="Trailer Name"
-            android:id="@+id/item_movie_trailer_name" />
+            android:text="Author Name"
+            android:textStyle="bold"
+            android:id="@+id/item_movie_review_author" />
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:textAppearance="?android:attr/textAppearanceMedium"
-            android:text="1080p"
-            android:id="@+id/item_movie_trailer_size" />
+            android:text="Review Content"
+            android:id="@+id/item_movie_review_content" />
     </LinearLayout>
 
 </RelativeLayout>

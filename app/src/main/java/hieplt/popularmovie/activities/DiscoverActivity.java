@@ -148,6 +148,8 @@ public class DiscoverActivity extends PopMovieActivityBase {
             doLoadDataInBackground(TMDBDiscoverService.SORT_BY_POPULAR);
         } else if (id == R.id.action_high_rate) {
             doLoadDataInBackground(TMDBDiscoverService.SORT_BY_HIGHEST_RATE);
+        } else if (id == R.id.action_favorite) {
+
         }
 
         return super.onOptionsItemSelected(item);
