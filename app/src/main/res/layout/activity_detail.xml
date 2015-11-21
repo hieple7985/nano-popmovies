@@ -14,7 +14,7 @@
 
         <android.support.v7.widget.Toolbar android:id="@+id/toolbar"
             android:layout_width="match_parent" android:layout_height="?attr/actionBarSize"
-            android:background="?attr/colorPrimary" app:popupTheme="@style/AppTheme.PopupOverlay" />
+            android:background="@android:color/transparent" app:popupTheme="@style/AppTheme.PopupOverlay" />
 
     </android.support.design.widget.AppBarLayout>
 
@@ -25,8 +25,8 @@
 
         <RelativeLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:isScrollContainer="true">
+            android:layout_height="wrap_content"
+            android:overScrollMode="always">
 
             <TextView
                 android:layout_width="match_parent"
@@ -51,7 +51,7 @@
                 android:id="@+id/linearLayout">
 
                 <ImageView
-                    android:layout_width="@android:dimen/thumbnail_width"
+                    android:layout_width="@dimen/activity_discover_detail_movie_poster_width"
                     android:layout_height="@dimen/activity_discover_detail_movie_poster_height"
                     android:layout_margin="4dp"
                     android:id="@+id/item_movie_poster" />
@@ -83,7 +83,7 @@
                         android:layout_height="wrap_content"
                         android:textAppearance="@android:style/TextAppearance.DeviceDefault.Medium"
                         android:text="Vote Average"
-                        android:layout_marginTop="24dp"
+                        android:layout_marginTop="8dp"
                         android:textStyle="bold"
                         android:id="@+id/item_movie_vote_average_label" />
 
@@ -94,12 +94,27 @@
                         android:text="6.8"
                         android:id="@+id/item_movie_vote_average_value" />
 
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textAppearance="@android:style/TextAppearance.DeviceDefault.Medium"
+                        android:text="Favorites"
+                        android:layout_marginTop="8dp"
+                        android:textStyle="bold"
+                        android:id="@+id/item_movie_vote_favorite_label" />
+
+                    <CheckBox
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:id="@+id/item_movie_vote_favorite_ic"
+                        android:button="@android:drawable/btn_star" />
+
                 </LinearLayout>
             </LinearLayout>
 
             <TextView
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
+                android:layout_height="wrap_content"
                 android:textAppearance="?android:attr/textAppearanceMedium"
                 android:text="Plot Synopsis"
                 android:id="@+id/item_movie_plot_synopsis"
@@ -107,7 +122,79 @@
                 android:layout_below="@+id/linearLayout"
                 android:layout_centerHorizontal="true" />
 
+
+
+            <LinearLayout
+                android:orientation="vertical"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/item_movie_plot_synopsis"
+                android:weightSum="2">
+
+                <View android:id="@+id/primerdivisor"
+                    android:layout_height="1dp"
+                    android:layout_width="fill_parent"
+                    android:background="#000000"
+                    android:layout_marginLeft="4dp"
+                    android:layout_marginRight="4dp"
+                    android:layout_centerHorizontal="true" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textAppearance="@android:style/TextAppearance.DeviceDefault.Medium"
+                    android:text="Trailers"
+                    android:textStyle="bold"
+                    android:id="@+id/item_movie_trailers"
+                    android:layout_marginLeft="8dp"
+                    android:layout_marginTop="8dp"
+                    android:layout_marginBottom="8dp"
+                    android:layout_alignLeft="@+id/item_movie_plot_synopsis"
+                    android:layout_alignStart="@+id/item_movie_plot_synopsis" />
+
+                <ListView
+                    android:layout_width="wrap_content"
+                    android:layout_height="200dp"
+                    android:id="@+id/lv_movie_trailers"
+                    android:layout_below="@+id/item_movie_trailers"
+                    android:layout_centerHorizontal="true"
+                    android:layout_weight="1" />
+
+                <View android:id="@+id/primerdivisor2"
+                    android:layout_height="1dp"
+                    android:layout_width="fill_parent"
+                    android:background="#000000"
+                    android:layout_marginLeft="4dp"
+                    android:layout_marginRight="4dp"
+                    android:layout_below="@+id/lv_movie_trailers"
+                    android:layout_centerHorizontal="true"
+                    android:layout_marginTop="16dp" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textAppearance="@android:style/TextAppearance.DeviceDefault.Medium"
+                    android:text="Reviews"
+                    android:textStyle="bold"
+                    android:id="@+id/item_movie_reviews"
+                    android:layout_below="@+id/primerdivisor2"
+                    android:layout_marginLeft="8dp"
+                    android:layout_marginTop="8dp"
+                    android:layout_marginBottom="8dp"
+                    android:layout_alignLeft="@+id/item_movie_plot_synopsis"
+                    android:layout_alignStart="@+id/item_movie_plot_synopsis" />
+
+                <ListView
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:id="@+id/lv_movie_reviews"
+                    android:layout_below="@+id/item_movie_reviews"
+                    android:layout_centerHorizontal="true"
+                    android:layout_weight="1" />
+            </LinearLayout>
+
         </RelativeLayout>
+
     </ScrollView>
 
 </RelativeLayout>
