@@ -4,13 +4,17 @@ Udacity Movie Project (Stage 1 & 2)
 
 The Popular Movies project is made and used for code reviewing in the Udacity Android Nanodegree course for Movie Project 1 & 2 phases. It is the functional project version based on the project requirements.
 
+# Third-party APIs
+- [TMDB](https://www.themoviedb.org/documentation/api?language=en)
+
 # Third-party Libraries
 
-Android Annotation
-Retrofit
-Picasso
-Google Gson
-Facebook Stetho
+- [Android Annotation](https://github.com/excilys/androidannotations)
+- [Retrofit](https://github.com/square/retrofit)
+- [Picasso](http://square.github.io/picasso/)
+- [Google Gson](https://github.com/google/gson)
+- [Facebook Stetho](http://facebook.github.io/stetho/)
+- [Parceler](https://github.com/johncarl81/parceler)
 
 # Licence
 
