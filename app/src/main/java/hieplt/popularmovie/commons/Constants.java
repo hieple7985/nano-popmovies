@@ -1,9 +1,17 @@
 package hieplt.popularmovie.commons;
 
+import hieplt.popularmovie.BuildConfig;
+
 /**
  * Created by HiepLT on 11/2/15.
  */
 public class Constants {
+
+    // ------------------------------------------------------------------------
+    // ORM Configuration
+    // ------------------------------------------------------------------------
+    public static final String  AUTHORITY               = BuildConfig.APPLICATION_ID;
+    public static final String  CONTENT_MINE_TYPE       = BuildConfig.APPLICATION_ID + ".provider";
 
     // ------------------------------------------------------------------------
     // Intent Data Key
@@ -12,7 +20,7 @@ public class Constants {
 
     // ------------------------------------------------------------------------
     // API JSON KEY
-    public static final String  TMDB_API_KEY            = "Please replace your key api here!";
+    public static final String  TMDB_API_KEY            = "09bfc8564818434e8872ac6c06c1ae25";
 
     // TMDB Base URL
     public static final String  TMDB_IMAGE_BASE_URL     = "http://image.tmdb.org/t/p/";

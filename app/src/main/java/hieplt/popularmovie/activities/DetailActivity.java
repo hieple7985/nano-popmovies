@@ -4,8 +4,11 @@ import android.content.ActivityNotFoundException;
 import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
+import android.support.design.widget.Snackbar;
 import android.util.Log;
 import android.view.Menu;
+import android.widget.CheckBox;
+import android.widget.CompoundButton;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
@@ -17,6 +20,7 @@ import com.squareup.picasso.Picasso;
 import org.androidannotations.annotations.AfterViews;
 import org.androidannotations.annotations.Background;
 import org.androidannotations.annotations.Bean;
+import org.androidannotations.annotations.CheckedChange;
 import org.androidannotations.annotations.EActivity;
 import org.androidannotations.annotations.Fullscreen;
 import org.androidannotations.annotations.ItemClick;
@@ -58,7 +62,11 @@ public class DetailActivity extends PopMovieActivityBase {
     @Bean
     TMDBMovieBuilder mTMDBMovieBuilder;
 
-    // Views
+    // Views - Common
+    @ViewById(R.id.toolbar)
+    android.support.v7.widget.Toolbar mToolbar;
+
+    // Views - Detail
     @ViewById(R.id.item_movie_title)
     TextView mTvTitle;
 
@@ -71,11 +79,11 @@ public class DetailActivity extends PopMovieActivityBase {
     @ViewById(R.id.item_movie_vote_average_value)
     TextView mTvVoteAverage;
 
+    @ViewById(R.id.item_movie_vote_favorite_checkbox)
+    CheckBox mCbFavorite;
+
     @ViewById(R.id.item_movie_plot_synopsis)
     TextView mTvPlotSynopsis;
-
-    @ViewById(R.id.toolbar)
-    android.support.v7.widget.Toolbar mToolbar;
 
     @ViewById(R.id.lv_movie_trailers)
     ListView mlvTrailers;
@@ -87,9 +95,15 @@ public class DetailActivity extends PopMovieActivityBase {
     TrailerAdapter mTrailerAdapter;
     ReviewAdapter mReviewAdapter;
 
-    // Data Value Object
+    // Data - Value Object
     List<TrailerVO> mTrailerVOs;
     List<ReviewVO> mReviewVOs;
+
+    // Data - Model
+    MovieVO mMovieVO;
+
+    // Content Provider
+    // TMDBProvider mTMDBProvider;
 
     @AfterViews
     void initViews() {
@@ -102,12 +116,12 @@ public class DetailActivity extends PopMovieActivityBase {
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setTitle(R.string.screen_name_discover_detail);
 
-        MovieVO movieVO = Parcels.unwrap(getIntent().getParcelableExtra(Constants.EXTRA_DISCOVER_MOVIE));
-        mTvTitle.setText(movieVO.getTitle());
-        Picasso.with(getApplicationContext()).load(movieVO.getThumbnailsURL()).into(mIvPoster);
-        mTvReleaseDate.setText(movieVO.getReleaseDate());
-        mTvVoteAverage.setText(movieVO.getVoteAverage());
-        mTvPlotSynopsis.setText(movieVO.getPlotSynopsis());
+        mMovieVO = Parcels.unwrap(getIntent().getParcelableExtra(Constants.EXTRA_DISCOVER_MOVIE));
+        mTvTitle.setText(mMovieVO.getTitle());
+        Picasso.with(getApplicationContext()).load(mMovieVO.getThumbnailsURL()).into(mIvPoster);
+        mTvReleaseDate.setText(mMovieVO.getReleaseDate());
+        mTvVoteAverage.setText(mMovieVO.getVoteAverage());
+        mTvPlotSynopsis.setText(mMovieVO.getPlotSynopsis());
 
         if (mTrailerAdapter == null) {
             mTrailerAdapter = new TrailerAdapter(this, new ArrayList<TrailerVO>());
@@ -120,8 +134,8 @@ public class DetailActivity extends PopMovieActivityBase {
         mlvReviews.setAdapter(mReviewAdapter);
 
         // Load more detailed data.
-        doLoadTrailersInBackground(movieVO.getId());
-        doLoadReviewsInBackground(movieVO.getId());
+        doLoadTrailersInBackground(mMovieVO.getId());
+        doLoadReviewsInBackground(mMovieVO.getId());
     }
 
     // ------------------------------------------------------------------------
@@ -227,6 +241,9 @@ public class DetailActivity extends PopMovieActivityBase {
         mReviewAdapter.notifyDataSetChanged();
     }
 
+    // ------------------------------------------------------------------------
+    // Events Binding
+    // ------------------------------------------------------------------------
     @ItemClick(R.id.lv_movie_trailers)
     void onMovieTrailerItemClicked(TrailerVO selectedTrailerVO) {
 
@@ -249,6 +266,27 @@ public class DetailActivity extends PopMovieActivityBase {
         }
     }
 
+    @CheckedChange(R.id.item_movie_vote_favorite_checkbox)
+    void onMovieFavoriteClicked(CompoundButton favorite, boolean isChecked) {
+        Log.i(LOG_TAG, "onMovieFavoriteClicked");
+        int noticeMsg;
+
+        if (isChecked) {
+            noticeMsg = R.string.detail_msg_favorite_added;
+        } else {
+            noticeMsg = R.string.detail_msg_favorite_removed;
+        }
+
+        Snackbar.make(getCurrentFocus(), noticeMsg, Snackbar.LENGTH_SHORT).show();
+
+        // mMovieVO
+
+        // mTMDBProvider.insert()
+    }
+
+    // ------------------------------------------------------------------------
+    // Menu Items Operations
+    // ------------------------------------------------------------------------
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         return true;
