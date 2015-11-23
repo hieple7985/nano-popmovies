@@ -25,7 +25,8 @@
             android:layout_height="wrap_content"
             android:textAppearance="?android:attr/textAppearanceMedium"
             android:text="Review Content"
-            android:id="@+id/item_movie_review_content" />
+            android:id="@+id/item_movie_review_content"
+            android:layout_marginBottom="16dp"/>
     </LinearLayout>
 
 </RelativeLayout>

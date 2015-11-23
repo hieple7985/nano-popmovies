@@ -18,9 +18,11 @@
 
     </android.support.design.widget.AppBarLayout>
 
-    <ScrollView
+    <android.support.v4.widget.NestedScrollView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:transitionGroup="true"
+        app:layout_behavior="@string/appbar_scrolling_view_behavior"
         android:layout_below="@+id/ablayout">
 
         <RelativeLayout
@@ -122,8 +124,6 @@
                 android:layout_below="@+id/linearLayout"
                 android:layout_centerHorizontal="true" />
 
-
-
             <LinearLayout
                 android:orientation="vertical"
                 android:layout_width="match_parent"
@@ -131,13 +131,7 @@
                 android:layout_below="@+id/item_movie_plot_synopsis"
                 android:weightSum="2">
 
-                <View android:id="@+id/primerdivisor"
-                    android:layout_height="1dp"
-                    android:layout_width="fill_parent"
-                    android:background="#000000"
-                    android:layout_marginLeft="4dp"
-                    android:layout_marginRight="4dp"
-                    android:layout_centerHorizontal="true" />
+                <include layout="@layout/common_divider" android:id="@+id/primerdivisor" />
 
                 <TextView
                     android:layout_width="wrap_content"
@@ -154,21 +148,14 @@
 
                 <ListView
                     android:layout_width="wrap_content"
-                    android:layout_height="200dp"
+                    android:layout_height="154dp"
                     android:id="@+id/lv_movie_trailers"
+                    android:nestedScrollingEnabled="true"
                     android:layout_below="@+id/item_movie_trailers"
                     android:layout_centerHorizontal="true"
                     android:layout_weight="1" />
 
-                <View android:id="@+id/primerdivisor2"
-                    android:layout_height="1dp"
-                    android:layout_width="fill_parent"
-                    android:background="#000000"
-                    android:layout_marginLeft="4dp"
-                    android:layout_marginRight="4dp"
-                    android:layout_below="@+id/lv_movie_trailers"
-                    android:layout_centerHorizontal="true"
-                    android:layout_marginTop="16dp" />
+                <include layout="@layout/common_divider" android:id="@+id/primerdivisor2" />
 
                 <TextView
                     android:layout_width="wrap_content"
@@ -188,6 +175,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="match_parent"
                     android:id="@+id/lv_movie_reviews"
+                    android:nestedScrollingEnabled="true"
                     android:layout_below="@+id/item_movie_reviews"
                     android:layout_centerHorizontal="true"
                     android:layout_weight="1" />
@@ -195,6 +183,6 @@
 
         </RelativeLayout>
 
-    </ScrollView>
+    </android.support.v4.widget.NestedScrollView>
 
 </RelativeLayout>
