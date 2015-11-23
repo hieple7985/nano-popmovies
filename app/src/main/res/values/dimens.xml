@@ -7,7 +7,7 @@
     <dimen name="activity_discover_grid_height">240dp</dimen>
 
     <!-- Discover: Detail Movie -->
-    <dimen name="activity_discover_detail_movie_title_box_height">96dp</dimen>
-    <dimen name="activity_discover_detail_movie_poster_width">192dp</dimen>
-    <dimen name="activity_discover_detail_movie_poster_height">240dp</dimen>
+    <dimen name="activity_discover_detail_movie_title_box_height">72dp</dimen>
+    <dimen name="activity_discover_detail_movie_poster_width">128dp</dimen>
+    <dimen name="activity_discover_detail_movie_poster_height">164dp</dimen>
 </resources>

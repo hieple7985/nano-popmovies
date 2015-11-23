@@ -3,8 +3,13 @@
 
     <string name="screen_name_discover_detail">Movie Detail</string>
 
+    <!-- Menu -->
     <string name="action_popular">Most Popular</string>
     <string name="action_high_rate">Highest Rated</string>
     <string name="action_favorite">Favorites</string>
+
+    <!-- Movie - Detail -->
+    <string name="detail_msg_favorite_added">Added to favorite</string>
+    <string name="detail_msg_favorite_removed">Removed from favorite</string>
 
 </resources>
