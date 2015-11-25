@@ -1,4 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+
+    <!-- Global -->
     <item name="isTablet" type="bool">true</item>
+
+    <!-- Discover -->
+    <item name="activity_discover_grid_column_num" type="integer">4</item>
+
 </resources>
