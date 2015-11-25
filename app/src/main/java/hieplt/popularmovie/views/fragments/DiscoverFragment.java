@@ -129,8 +129,23 @@ public class DiscoverFragment extends PopMovieFragmentBase {
     void onMovieGridItemClicked(MovieVO selectedMovie) {
         Log.i(LOG_TAG, "onMovieGridItemClicked: selectedMovieVO = " + selectedMovie.getTitle());
 
-//        Intent intent = new Intent(this, DetailActivity_.class);
-//        intent.putExtra(Constants.EXTRA_DISCOVER_MOVIE, Parcels.wrap(selectedMovie));
-//        startActivity(intent);
+//        if (mIsTablet) {
+//
+//            // Build Fragment
+//            Bundle args = new Bundle();
+//            args.putParcelable(Constants.EXTRA_DISCOVER_MOVIE, Parcels.wrap(selectedMovie));
+//            DetailFragment_ detailFragment_ = new DetailFragment_();
+//            detailFragment_.setArguments(args);
+//
+//            // Replace
+//            FragmentManager fragmentManager = getSupportFragmentManager();
+//            FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+//            fragmentTransaction.replace(R.id.tablet_fragment_detail, detailFragment_, DetailFragment_.TAG_NAME).commit();
+//
+//        } else {
+//            Intent intent = new Intent(this, DetailActivity_.class);
+//            intent.putExtra(Constants.EXTRA_DISCOVER_MOVIE, Parcels.wrap(selectedMovie));
+//            startActivity(intent);
+//        }
     }
 }

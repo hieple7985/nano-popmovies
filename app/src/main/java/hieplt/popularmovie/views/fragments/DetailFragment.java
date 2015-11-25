@@ -4,6 +4,7 @@ import android.content.ActivityNotFoundException;
 import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
+import android.os.Bundle;
 import android.support.design.widget.Snackbar;
 import android.util.Log;
 import android.widget.CheckBox;
@@ -24,6 +25,7 @@ import org.androidannotations.annotations.EFragment;
 import org.androidannotations.annotations.ItemClick;
 import org.androidannotations.annotations.UiThread;
 import org.androidannotations.annotations.ViewById;
+import org.parceler.Parcels;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -105,34 +107,55 @@ public class DetailFragment extends PopMovieFragmentBase {
     // Content Provider
     // TMDBProvider mTMDBProvider;
 
+    @Override
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+
+//        if (getArguments() != null) {
+//            mPosterImage = getArguments().getParcelable(Constants.POSTER_IMAGE_KEY);
+//            mMovieData = getArguments().getParcelable(Constants.MOVIE_DETAIL_KEY);
+//            if (mMovieData != null) {
+//                mAddedInFavorite = FavoriteMovieContentProvider.getMovieData(getActivity(), mMovieData.id) != null;
+//            }
+////            Log.d(TAG, "onCreate() called with: " + "mMovieData = [" + mMovieData + "]");
+//            Log.d(TAG, "onCreate() called with: " + "mAddedInFavorite = [" + mAddedInFavorite + "]");
+//        }
+    }
+
     @AfterViews
     void initViews() {
 
         mContext = getActivity().getApplicationContext();
 
-        // getActivity().getAr
 
-        // mMovieVO = Parcels.unwrap(getActivity().getIntent().getParcelable(Constants.EXTRA_DISCOVER_MOVIE));
 
-        mTvTitle.setText(mMovieVO.getTitle());
-        Picasso.with(mContext).load(mMovieVO.getThumbnailsURL()).into(mIvPoster);
-        mTvReleaseDate.setText(mMovieVO.getReleaseDate());
-        mTvVoteAverage.setText(mMovieVO.getVoteAverage());
-        mTvPlotSynopsis.setText(mMovieVO.getPlotSynopsis());
+        if (getArguments() != null) {
+            if (getArguments().getParcelable(Constants.EXTRA_DISCOVER_MOVIE) != null) {
+                mMovieVO = Parcels.unwrap(getArguments().getParcelable(Constants.EXTRA_DISCOVER_MOVIE));
 
-        if (mTrailerAdapter == null) {
-            mTrailerAdapter = new TrailerAdapter(getActivity(), new ArrayList<TrailerVO>());
+                if (mMovieVO != null) {
+                    mTvTitle.setText(mMovieVO.getTitle());
+                    Picasso.with(mContext).load(mMovieVO.getThumbnailsURL()).into(mIvPoster);
+                    mTvReleaseDate.setText(mMovieVO.getReleaseDate());
+                    mTvVoteAverage.setText(mMovieVO.getVoteAverage());
+                    mTvPlotSynopsis.setText(mMovieVO.getPlotSynopsis());
+
+                    if (mTrailerAdapter == null) {
+                        mTrailerAdapter = new TrailerAdapter(getActivity(), new ArrayList<TrailerVO>());
+                    }
+                    mlvTrailers.setAdapter(mTrailerAdapter);
+
+                    if (mReviewAdapter == null) {
+                        mReviewAdapter = new ReviewAdapter(getActivity(), new ArrayList<ReviewVO>());
+                    }
+                    mlvReviews.setAdapter(mReviewAdapter);
+
+                    // Load more detailed data.
+                    doLoadTrailersInBackground(mMovieVO.getId());
+                    doLoadReviewsInBackground(mMovieVO.getId());
+                }
+            }
         }
-        mlvTrailers.setAdapter(mTrailerAdapter);
-
-        if (mReviewAdapter == null) {
-            mReviewAdapter = new ReviewAdapter(getActivity(), new ArrayList<ReviewVO>());
-        }
-        mlvReviews.setAdapter(mReviewAdapter);
-
-        // Load more detailed data.
-        doLoadTrailersInBackground(mMovieVO.getId());
-        doLoadReviewsInBackground(mMovieVO.getId());
     }
 
     // ------------------------------------------------------------------------

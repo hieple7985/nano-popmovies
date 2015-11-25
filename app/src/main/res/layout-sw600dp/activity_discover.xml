@@ -34,6 +34,8 @@
             tools:layout="@layout/fragment_discover">
 
         </fragment>
+
+        <!--
         <fragment
             android:layout_width="fill_parent"
             android:layout_height="fill_parent"
@@ -44,6 +46,15 @@
             tools:layout="@layout/fragment_detail">
 
         </fragment>
+        -->
+
+        <FrameLayout
+            android:id="@+id/tablet_fragment_detail"
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent"
+            android:layout_weight="1">
+
+        </FrameLayout>
 
     </LinearLayout>
 
