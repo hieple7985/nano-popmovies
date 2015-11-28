@@ -24,35 +24,21 @@
         android:layout_height="match_parent"
         android:weightSum="2">
 
-        <fragment
+        <FrameLayout
             android:layout_width="fill_parent"
             android:layout_height="fill_parent"
             android:layout_weight="1"
             android:id="@+id/tablet_fragment_discover"
-            android:tag="tablet_fragment_discover"
-            class="hieplt.popularmovie.views.fragments.DiscoverFragment_"
-            tools:layout="@layout/fragment_discover">
+            android:tag="tablet_fragment_discover">
 
-        </fragment>
-
-        <!--
-        <fragment
-            android:layout_width="fill_parent"
-            android:layout_height="fill_parent"
-            android:layout_weight="1"
-            android:id="@+id/tablet_fragment_detail"
-            android:tag="tablet_fragment_detail"
-            class="hieplt.popularmovie.views.fragments.DetailFragment_"
-            tools:layout="@layout/fragment_detail">
-
-        </fragment>
-        -->
+        </FrameLayout>
 
         <FrameLayout
             android:id="@+id/tablet_fragment_detail"
             android:layout_width="fill_parent"
             android:layout_height="fill_parent"
-            android:layout_weight="1">
+            android:layout_weight="1"
+            android:tag="tablet_fragment_detail">
 
         </FrameLayout>
 

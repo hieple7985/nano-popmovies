@@ -2,6 +2,7 @@ package hieplt.popularmovie.activities;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.util.Log;
@@ -32,6 +33,7 @@ import hieplt.popularmovie.models.vos.MovieVO;
 import hieplt.popularmovie.services.rests.tmdb.TMDBDiscoverBuilder;
 import hieplt.popularmovie.services.rests.tmdb.TMDBDiscoverService;
 import hieplt.popularmovie.views.fragments.DetailFragment_;
+import hieplt.popularmovie.views.fragments.DiscoverFragment_;
 import retrofit.Callback;
 import retrofit.RetrofitError;
 import retrofit.client.Response;
@@ -68,10 +70,7 @@ public class DiscoverActivity extends PopMovieActivityBase {
         onSetupSupportActionBar(mToolbar);
 
         mIsTablet = getResources().getBoolean(R.bool.isTablet);
-        if (mIsTablet) {
-            // do something
-
-        } else { // This is smart phone logic.
+        if (!mIsTablet) {
 
             if (mDiscoverAdapter == null) {
                 mDiscoverAdapter = new DiscoverAdapter(this, new ArrayList<MovieVO>());
@@ -80,6 +79,19 @@ public class DiscoverActivity extends PopMovieActivityBase {
             mGvMovies.setAdapter(mDiscoverAdapter);
 
             doLoadDataInBackground(TMDBDiscoverService.SORT_BY_POPULAR);
+
+        } else {
+
+            // Build Fragment
+            Bundle args = new Bundle();
+            args.putString(Constants.EXTRA_DISCOVER_MODE, TMDBDiscoverService.SORT_BY_POPULAR);
+            DiscoverFragment_ discoverFragment_ = new DiscoverFragment_();
+            discoverFragment_.setArguments(args);
+
+            // Replace
+            FragmentManager fragmentManager = getSupportFragmentManager();
+            FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+            fragmentTransaction.replace(R.id.tablet_fragment_discover, discoverFragment_, DiscoverFragment_.TAG_NAME).commit();
         }
     }
 
@@ -143,22 +155,27 @@ public class DiscoverActivity extends PopMovieActivityBase {
         });
     }
 
+    /**
+     * This method is always works for Smart Phone, non-fragment mechanism.
+     * @param selectedMovie
+     */
     @ItemClick(R.id.gl_movies)
     void onMovieGridItemClicked(MovieVO selectedMovie) {
         Log.i(LOG_TAG, "onMovieGridItemClicked: selectedMovieVO = " + selectedMovie.getTitle());
 
         if (mIsTablet) {
 
-            // Build Fragment
-            Bundle args = new Bundle();
-            args.putParcelable(Constants.EXTRA_DISCOVER_MOVIE, Parcels.wrap(selectedMovie));
-            DetailFragment_ detailFragment_ = new DetailFragment_();
-            detailFragment_.setArguments(args);
+//            // Build Fragment
+//            Bundle args = new Bundle();
+//            args.putParcelable(Constants.EXTRA_DISCOVER_MOVIE, null);
+//            DetailFragment_ detailFragment_ = new DetailFragment_();
+//            detailFragment_.setArguments(args);
+//
+//            // Replace with blank fragment
+//            FragmentManager fragmentManager = getSupportFragmentManager();
+//            FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+//            fragmentTransaction.replace(R.id.tablet_fragment_detail, null, DetailFragment_.TAG_NAME).commit();
 
-            // Replace
-            FragmentManager fragmentManager = getSupportFragmentManager();
-            FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-            fragmentTransaction.replace(R.id.tablet_fragment_detail, detailFragment_, DetailFragment_.TAG_NAME).commit();
 
         } else {
             Intent intent = new Intent(this, DetailActivity_.class);
@@ -174,19 +191,42 @@ public class DiscoverActivity extends PopMovieActivityBase {
         // as you specify a parent activity in AndroidManifest.xml.
         int id = item.getItemId();
 
-        // noinspection SimplifiableIfStatement
-        if (id == R.id.action_popular) {
-            doLoadDataInBackground(TMDBDiscoverService.SORT_BY_POPULAR);
-        } else if (id == R.id.action_high_rate) {
-            doLoadDataInBackground(TMDBDiscoverService.SORT_BY_HIGHEST_RATE);
-        } else if (id == R.id.action_favorite) {
-            // TODO - Implement Favorite List.
+        if (!mIsTablet) {
+            if (id == R.id.action_popular) {
+                doLoadDataInBackground(TMDBDiscoverService.SORT_BY_POPULAR);
+            } else if (id == R.id.action_high_rate) {
+                doLoadDataInBackground(TMDBDiscoverService.SORT_BY_HIGHEST_RATE);
+            } else if (id == R.id.action_favorite) {
+                // TODO - Implement Favorite List.
+            }
+
+        } else {
+
+            //  FRAGMENT
+            // Build Fragment
+            Bundle args = new Bundle();
+
+            if (id == R.id.action_popular) {
+                args.putString(Constants.EXTRA_DISCOVER_MODE, TMDBDiscoverService.SORT_BY_POPULAR);
+            } else if (id == R.id.action_high_rate) {
+                args.putString(Constants.EXTRA_DISCOVER_MODE, TMDBDiscoverService.SORT_BY_HIGHEST_RATE);
+            } else if (id == R.id.action_favorite) {
+                // TODO - Implement Favorite List.
+            }
+
+            DiscoverFragment_ discoverFragment_ = new DiscoverFragment_();
+            discoverFragment_.setArguments(args);
+
+            // Replace
+            FragmentManager fragmentManager = getSupportFragmentManager();
+            FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+            fragmentTransaction.replace(R.id.tablet_fragment_discover, discoverFragment_, DiscoverFragment_.TAG_NAME);
+
+            // DETAIL FRAGMENT
+            // Replace with blank fragment
+            fragmentTransaction.replace(R.id.tablet_fragment_detail, new Fragment(), DetailFragment_.TAG_NAME).commit();
         }
 
         return super.onOptionsItemSelected(item);
     }
-
-    // ========================================================================
-    // AREA OF FRAGMENTS
-    // ========================================================================
 }
