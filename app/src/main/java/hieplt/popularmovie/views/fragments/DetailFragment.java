@@ -4,8 +4,8 @@ import android.content.ActivityNotFoundException;
 import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
-import android.os.Bundle;
 import android.support.design.widget.Snackbar;
+import android.support.v4.app.Fragment;
 import android.util.Log;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
@@ -35,7 +35,6 @@ import java.util.List;
 import hieplt.popularmovie.R;
 import hieplt.popularmovie.adapters.ReviewAdapter;
 import hieplt.popularmovie.adapters.TrailerAdapter;
-import hieplt.popularmovie.bases.PopMovieFragmentBase;
 import hieplt.popularmovie.commons.Constants;
 import hieplt.popularmovie.models.gsons.MovieReviewGSON;
 import hieplt.popularmovie.models.gsons.MovieTrailerGSON;
@@ -51,7 +50,7 @@ import retrofit.client.Response;
  * Created by HiepLT on 11/23/15.
  */
 @EFragment(R.layout.fragment_detail)
-public class DetailFragment extends PopMovieFragmentBase {
+public class DetailFragment extends Fragment {
 
     private final static String LOG_TAG = DetailFragment.class.getSimpleName();
 
@@ -107,27 +106,10 @@ public class DetailFragment extends PopMovieFragmentBase {
     // Content Provider
     // TMDBProvider mTMDBProvider;
 
-    @Override
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-
-//        if (getArguments() != null) {
-//            mPosterImage = getArguments().getParcelable(Constants.POSTER_IMAGE_KEY);
-//            mMovieData = getArguments().getParcelable(Constants.MOVIE_DETAIL_KEY);
-//            if (mMovieData != null) {
-//                mAddedInFavorite = FavoriteMovieContentProvider.getMovieData(getActivity(), mMovieData.id) != null;
-//            }
-////            Log.d(TAG, "onCreate() called with: " + "mMovieData = [" + mMovieData + "]");
-//            Log.d(TAG, "onCreate() called with: " + "mAddedInFavorite = [" + mAddedInFavorite + "]");
-//        }
-    }
-
     @AfterViews
     void initViews() {
 
         mContext = getActivity().getApplicationContext();
-
-
 
         if (getArguments() != null) {
             if (getArguments().getParcelable(Constants.EXTRA_DISCOVER_MOVIE) != null) {
@@ -297,9 +279,5 @@ public class DetailFragment extends PopMovieFragmentBase {
         }
 
         Snackbar.make(getView(), noticeMsg, Snackbar.LENGTH_SHORT).show();
-
-        // mMovieVO
-
-        // mTMDBProvider.insert()
     }
 }

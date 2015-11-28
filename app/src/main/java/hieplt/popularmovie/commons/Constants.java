@@ -17,6 +17,7 @@ public class Constants {
     // Intent Data Key
     // ------------------------------------------------------------------------
     public static final String  EXTRA_DISCOVER_MOVIE    = "EXTRA_DISCOVER_MOVIE";
+    public static final String  EXTRA_DISCOVER_MODE     = "EXTRA_DISCOVER_MODE";
 
     // ------------------------------------------------------------------------
     // API JSON KEY
