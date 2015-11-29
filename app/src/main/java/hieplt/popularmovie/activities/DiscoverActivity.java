@@ -1,6 +1,7 @@
 package hieplt.popularmovie.activities;
 
 import android.content.Intent;
+import android.database.Cursor;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
@@ -29,6 +30,7 @@ import hieplt.popularmovie.adapters.DiscoverAdapter;
 import hieplt.popularmovie.bases.PopMovieActivityBase;
 import hieplt.popularmovie.commons.Constants;
 import hieplt.popularmovie.models.gsons.DiscoverMovieGSON;
+import hieplt.popularmovie.models.orms.MovieORMContract;
 import hieplt.popularmovie.models.vos.MovieVO;
 import hieplt.popularmovie.services.rests.tmdb.TMDBDiscoverBuilder;
 import hieplt.popularmovie.services.rests.tmdb.TMDBDiscoverService;
@@ -65,7 +67,7 @@ public class DiscoverActivity extends PopMovieActivityBase {
     boolean mIsTablet = false;
 
     @AfterViews
-    void initViews() {
+    void afterViews() {
 
         onSetupSupportActionBar(mToolbar);
 
@@ -155,6 +157,61 @@ public class DiscoverActivity extends PopMovieActivityBase {
         });
     }
 
+    @Background(serial = "load-db-favorite-movies")
+    void doLoadFavoriteFromDatabaseInBackground() {
+
+        // TODO - Implement Favorite List.
+        Cursor c = getContentResolver().query(MovieORMContract.CONTENT_URI, null,
+                null, null, null);
+
+        // Build value object
+        mMovieVOs = new ArrayList<>();
+        MovieVO movieVO;
+        while(c.moveToNext()) {
+            movieVO = new MovieVO();
+
+            // Construct info into object.
+            for (int i = 0; i < c.getColumnCount(); i++) {
+                // Log.d(getClass().getSimpleName(), c.getColumnName(i) + " : " + c.getString(i));
+
+                String columnName = c.getColumnName(i);
+
+                if (columnName.equalsIgnoreCase(MovieORMContract.TITLE)) {
+                    movieVO.setTitle(c.getString(i));
+                }
+
+                if (columnName.equalsIgnoreCase(MovieORMContract.RELEASEDATE)) {
+                    movieVO.setReleaseDate(c.getString(i));
+                }
+
+                if (columnName.equalsIgnoreCase(MovieORMContract.THUMBNAILSURL)) {
+                    movieVO.setThumbnailsURL(new StringBuilder()
+                            .append(Constants.TMDB_IMAGE_BASE_URL)
+                            .append(MovieVO.ThumbnailSize.mW342)
+                            .append(c.getString(i))
+                            .toString());
+                }
+
+                if (columnName.equalsIgnoreCase(MovieORMContract.VOTEAVERAGE)) {
+                    movieVO.setVoteAverage(c.getString(i));
+                }
+
+                if (columnName.equalsIgnoreCase(MovieORMContract.PLOTSYNOPSIS)) {
+                    movieVO.setPlotSynopsis(c.getString(i));
+                }
+
+                if (columnName.equalsIgnoreCase(MovieORMContract._ID)) {
+                    movieVO.setId(c.getInt(i));
+                }
+            }
+
+            mMovieVOs.add(movieVO);
+        }
+        c.close();
+
+        doUpdateUI();
+    }
+
     /**
      * This method is always works for Smart Phone, non-fragment mechanism.
      * @param selectedMovie
@@ -164,19 +221,7 @@ public class DiscoverActivity extends PopMovieActivityBase {
         Log.i(LOG_TAG, "onMovieGridItemClicked: selectedMovieVO = " + selectedMovie.getTitle());
 
         if (mIsTablet) {
-
-//            // Build Fragment
-//            Bundle args = new Bundle();
-//            args.putParcelable(Constants.EXTRA_DISCOVER_MOVIE, null);
-//            DetailFragment_ detailFragment_ = new DetailFragment_();
-//            detailFragment_.setArguments(args);
-//
-//            // Replace with blank fragment
-//            FragmentManager fragmentManager = getSupportFragmentManager();
-//            FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-//            fragmentTransaction.replace(R.id.tablet_fragment_detail, null, DetailFragment_.TAG_NAME).commit();
-
-
+            // Check logic on fragment
         } else {
             Intent intent = new Intent(this, DetailActivity_.class);
             intent.putExtra(Constants.EXTRA_DISCOVER_MOVIE, Parcels.wrap(selectedMovie));
@@ -197,12 +242,12 @@ public class DiscoverActivity extends PopMovieActivityBase {
             } else if (id == R.id.action_high_rate) {
                 doLoadDataInBackground(TMDBDiscoverService.SORT_BY_HIGHEST_RATE);
             } else if (id == R.id.action_favorite) {
-                // TODO - Implement Favorite List.
+                doLoadFavoriteFromDatabaseInBackground();
             }
 
         } else {
 
-            //  FRAGMENT
+            // FRAGMENT
             // Build Fragment
             Bundle args = new Bundle();
 
@@ -211,7 +256,7 @@ public class DiscoverActivity extends PopMovieActivityBase {
             } else if (id == R.id.action_high_rate) {
                 args.putString(Constants.EXTRA_DISCOVER_MODE, TMDBDiscoverService.SORT_BY_HIGHEST_RATE);
             } else if (id == R.id.action_favorite) {
-                // TODO - Implement Favorite List.
+                args.putString(Constants.EXTRA_DISCOVER_MODE, TMDBDiscoverService.SORT_BY_FAVORITE);
             }
 
             DiscoverFragment_ discoverFragment_ = new DiscoverFragment_();

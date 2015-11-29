@@ -6,10 +6,12 @@
     <!-- Menu -->
     <string name="action_popular">Most Popular</string>
     <string name="action_high_rate">Highest Rated</string>
+    <string name="action_share">Share 1st trailer</string>
     <string name="action_favorite">Favorites</string>
 
     <!-- Movie - Detail -->
     <string name="detail_msg_favorite_added">Added to favorite</string>
     <string name="detail_msg_favorite_removed">Removed from favorite</string>
+    <string name="detail_msg_favorite_existed">The favorite is existed</string>
 
 </resources>

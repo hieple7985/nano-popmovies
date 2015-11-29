@@ -58,6 +58,7 @@ android {
 
 def AAVersion = '3.3.2'
 def OCPVersion = '1.0.4'
+def ormliteVersion = '4.48'
 
 dependencies {
 
@@ -79,13 +80,16 @@ dependencies {
     apt "org.parceler:parceler:1.0.4"
 
     compile 'com.facebook.stetho:stetho:1.2.0'
-    // compile 'com.facebook.stetho:stetho-okhttp:1.2.0'
     compile 'com.facebook.stetho:stetho-urlconnection:1.2.0'
     compile 'com.squareup:javapoet:1.4.0'
 
+    compile "com.j256.ormlite:ormlite-core:$ormliteVersion"
+    compile "com.j256.ormlite:ormlite-android:$ormliteVersion"
+
     compile "com.tojc.ormlite.android:ormlite-content-provider-library:$OCPVersion@aar" // @aar or @jar
     // compile "com.tojc.ormlite.android:ormlite-content-provider-compiler:$OCPVersion" // jar only
-    // apt "com.tojc.ormlite.android:ormlite-content-provider-compiler:$OCPVersion"
+    apt "com.tojc.ormlite.android:ormlite-content-provider-compiler:$OCPVersion"
+
 }
 
 apt {

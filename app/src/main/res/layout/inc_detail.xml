@@ -98,8 +98,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:id="@+id/item_movie_vote_favorite_checkbox"
-                        android:button="@android:drawable/btn_star"
-                        android:checked="false" />
+                        android:button="@android:drawable/btn_star" />
 
                 </LinearLayout>
             </LinearLayout>

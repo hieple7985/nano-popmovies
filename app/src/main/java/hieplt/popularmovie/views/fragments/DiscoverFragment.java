@@ -1,5 +1,6 @@
 package hieplt.popularmovie.views.fragments;
 
+import android.database.Cursor;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
@@ -25,8 +26,10 @@ import hieplt.popularmovie.R;
 import hieplt.popularmovie.adapters.DiscoverAdapter;
 import hieplt.popularmovie.commons.Constants;
 import hieplt.popularmovie.models.gsons.DiscoverMovieGSON;
+import hieplt.popularmovie.models.orms.MovieORMContract;
 import hieplt.popularmovie.models.vos.MovieVO;
 import hieplt.popularmovie.services.rests.tmdb.TMDBDiscoverBuilder;
+import hieplt.popularmovie.services.rests.tmdb.TMDBDiscoverService;
 import retrofit.Callback;
 import retrofit.RetrofitError;
 import retrofit.client.Response;
@@ -62,7 +65,7 @@ public class DiscoverFragment extends Fragment {
     boolean mIsTablet = false;
 
     @AfterViews
-    void initViews() {
+    void afterViews() {
 
         mIsTablet = getResources().getBoolean(R.bool.isTablet);
         if (mIsTablet) {
@@ -78,7 +81,11 @@ public class DiscoverFragment extends Fragment {
 
                     mGvMovies.setAdapter(mDiscoverAdapter);
 
-                    doLoadDataInBackground(discoverMode);
+                    if (discoverMode.equalsIgnoreCase(TMDBDiscoverService.SORT_BY_FAVORITE)) {
+                        doLoadFavoriteFromDatabaseInBackground();
+                    } else {
+                        doLoadDataInBackground(discoverMode);
+                    }
                 }
             }
         }
@@ -142,6 +149,61 @@ public class DiscoverFragment extends Fragment {
                 Log.i(LOG_TAG, error.toString());
             }
         });
+    }
+
+    @Background(serial = "load-db-favorite-movies")
+    void doLoadFavoriteFromDatabaseInBackground() {
+
+        // TODO - Implement Favorite List.
+        Cursor c = getActivity().getContentResolver().query(MovieORMContract.CONTENT_URI, null,
+                null, null, null);
+
+        // Build value object
+        mMovieVOs = new ArrayList<>();
+        MovieVO movieVO;
+        while(c.moveToNext()) {
+            movieVO = new MovieVO();
+
+            // Construct info into object.
+            for (int i = 0; i < c.getColumnCount(); i++) {
+                // Log.d(getClass().getSimpleName(), c.getColumnName(i) + " : " + c.getString(i));
+
+                String columnName = c.getColumnName(i);
+
+                if (columnName.equalsIgnoreCase(MovieORMContract.TITLE)) {
+                    movieVO.setTitle(c.getString(i));
+                }
+
+                if (columnName.equalsIgnoreCase(MovieORMContract.RELEASEDATE)) {
+                    movieVO.setReleaseDate(c.getString(i));
+                }
+
+                if (columnName.equalsIgnoreCase(MovieORMContract.THUMBNAILSURL)) {
+                    movieVO.setThumbnailsURL(new StringBuilder()
+                            .append(Constants.TMDB_IMAGE_BASE_URL)
+                            .append(MovieVO.ThumbnailSize.mW342)
+                            .append(c.getString(i))
+                            .toString());
+                }
+
+                if (columnName.equalsIgnoreCase(MovieORMContract.VOTEAVERAGE)) {
+                    movieVO.setVoteAverage(c.getString(i));
+                }
+
+                if (columnName.equalsIgnoreCase(MovieORMContract.PLOTSYNOPSIS)) {
+                    movieVO.setPlotSynopsis(c.getString(i));
+                }
+
+                if (columnName.equalsIgnoreCase(MovieORMContract._ID)) {
+                    movieVO.setId(c.getInt(i));
+                }
+            }
+
+            mMovieVOs.add(movieVO);
+        }
+        c.close();
+
+        doUpdateUI();
     }
 
     @ItemClick(R.id.gl_movies)

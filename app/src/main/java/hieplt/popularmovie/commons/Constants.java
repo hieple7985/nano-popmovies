@@ -20,6 +20,10 @@ public class Constants {
     public static final String  EXTRA_DISCOVER_MODE     = "EXTRA_DISCOVER_MODE";
 
     // ------------------------------------------------------------------------
+    // YouTube
+    public static final String  YOU_TUBE_VIDEO_URL      = "http://www.youtube.com/watch?v=";
+
+    // ------------------------------------------------------------------------
     // API JSON KEY
     public static final String  TMDB_API_KEY            = "09bfc8564818434e8872ac6c06c1ae25";
 
