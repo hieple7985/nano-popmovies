@@ -15,6 +15,8 @@ The Popular Movies project is made and used for code reviewing in the Udacity An
 - [Google Gson](https://github.com/google/gson)
 - [Facebook Stetho](http://facebook.github.io/stetho/)
 - [Parceler](https://github.com/johncarl81/parceler)
+- [OrmLite](http://ormlite.com/)
+- [OrmLite Content Provider](https://github.com/jakenjarvis/Android-OrmLiteContentProvider)
 
 # Licence
 
