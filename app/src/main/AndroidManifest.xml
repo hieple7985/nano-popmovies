@@ -29,6 +29,13 @@
                 android:value="activities.DiscoverActivity_" />
 
         </activity>
+
+        <provider android:name=".services.providers.TMDBMovieProvider"
+            android:authorities="hieplt.popularmovie"
+            android:exported="false"/>
+
     </application>
+
+
 
 </manifest>

@@ -5,16 +5,11 @@ import android.database.sqlite.SQLiteDatabase;
 import android.util.Log;
 
 import com.j256.ormlite.android.apptools.OrmLiteSqliteOpenHelper;
-import com.j256.ormlite.dao.Dao;
-import com.j256.ormlite.dao.RuntimeExceptionDao;
 import com.j256.ormlite.support.ConnectionSource;
 import com.j256.ormlite.table.TableUtils;
 
-import org.androidannotations.annotations.EBean;
-
 import java.sql.SQLException;
 
-import hieplt.popularmovie.R;
 import hieplt.popularmovie.models.orms.MovieORM;
 
 /**
@@ -22,7 +17,6 @@ import hieplt.popularmovie.models.orms.MovieORM;
  * Database helper class used to manage the creation and upgrading of your database. This class also usually provides
  * the DAOs used by the other classes.
  */
-@EBean
 public class DatabaseHelper extends OrmLiteSqliteOpenHelper {
 
     // name of the database file for your application -- change to something appropriate for your app
@@ -31,12 +25,8 @@ public class DatabaseHelper extends OrmLiteSqliteOpenHelper {
     // any time you make changes to your database objects, you may have to increase the database version
     private static final int DATABASE_VERSION = 1;
 
-    // the DAO object we use to access the SimpleData table
-    private Dao<MovieORM, Integer> movieDao = null;
-    private RuntimeExceptionDao<MovieORM, Integer> movieRuntimeDao = null;
-
     public DatabaseHelper(Context context) {
-        super(context, DATABASE_NAME, null, DATABASE_VERSION, R.raw.ormlite_config);
+        super(context, DATABASE_NAME, null, DATABASE_VERSION);
     }
 
     /**
@@ -52,16 +42,6 @@ public class DatabaseHelper extends OrmLiteSqliteOpenHelper {
             Log.e(DatabaseHelper.class.getName(), "Can't create database", e);
             throw new RuntimeException(e);
         }
-
-//        // here we try inserting data in the on-create as a test
-//        RuntimeExceptionDao<MovieORM, Integer> dao = getSimpleDataDao();
-//        long millis = System.currentTimeMillis();
-//        // create some entries in the onCreate
-//        MovieORM simple = new MovieORM(millis);
-//        dao.create(simple);
-//        simple = new MovieORM(millis + 1);
-//        dao.create(simple);
-//        Log.i(DatabaseHelper.class.getName(), "created new entries in onCreate: " + millis);
     }
 
     /**
@@ -73,6 +53,7 @@ public class DatabaseHelper extends OrmLiteSqliteOpenHelper {
         try {
             Log.i(DatabaseHelper.class.getName(), "onUpgrade");
             TableUtils.dropTable(connectionSource, MovieORM.class, true);
+            TableUtils.createTable(connectionSource, MovieORM.class);
 
             // after we drop the old databases, we create the new ones
             onCreate(db, connectionSource);
@@ -80,38 +61,5 @@ public class DatabaseHelper extends OrmLiteSqliteOpenHelper {
             Log.e(DatabaseHelper.class.getName(), "Can't drop databases", e);
             throw new RuntimeException(e);
         }
-    }
-
-    /**
-     * Returns the Database Access Object (DAO) for our SimpleData class. It will create it or just give the cached
-     * value.
-     */
-    public Dao<MovieORM, Integer> getDao() throws SQLException {
-        if (movieDao == null) {
-            movieDao = getDao(MovieORM.class);
-        }
-
-        return movieDao;
-    }
-
-    /**
-     * Returns the RuntimeExceptionDao (Database Access Object) version of a Dao for our SimpleData class. It will
-     * create it or just give the cached value. RuntimeExceptionDao only through RuntimeExceptions.
-     */
-    public RuntimeExceptionDao<MovieORM, Integer> getSimpleDataDao() {
-        if (movieRuntimeDao == null) {
-            movieRuntimeDao = getRuntimeExceptionDao(MovieORM.class);
-        }
-        return movieRuntimeDao;
-    }
-
-    /**
-     * Close the database connections and clear any cached DAOs.
-     */
-    @Override
-    public void close() {
-        super.close();
-        movieDao = null;
-        movieRuntimeDao = null;
     }
 }

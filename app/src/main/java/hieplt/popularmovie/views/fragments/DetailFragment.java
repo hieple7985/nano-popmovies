@@ -1,14 +1,16 @@
 package hieplt.popularmovie.views.fragments;
 
 import android.content.ActivityNotFoundException;
+import android.content.ContentValues;
 import android.content.Context;
 import android.content.Intent;
+import android.database.Cursor;
 import android.net.Uri;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
 import android.util.Log;
+import android.view.View;
 import android.widget.CheckBox;
-import android.widget.CompoundButton;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
@@ -20,7 +22,7 @@ import com.squareup.picasso.Picasso;
 import org.androidannotations.annotations.AfterViews;
 import org.androidannotations.annotations.Background;
 import org.androidannotations.annotations.Bean;
-import org.androidannotations.annotations.CheckedChange;
+import org.androidannotations.annotations.Click;
 import org.androidannotations.annotations.EFragment;
 import org.androidannotations.annotations.ItemClick;
 import org.androidannotations.annotations.UiThread;
@@ -38,6 +40,7 @@ import hieplt.popularmovie.adapters.TrailerAdapter;
 import hieplt.popularmovie.commons.Constants;
 import hieplt.popularmovie.models.gsons.MovieReviewGSON;
 import hieplt.popularmovie.models.gsons.MovieTrailerGSON;
+import hieplt.popularmovie.models.orms.MovieORMContract;
 import hieplt.popularmovie.models.vos.MovieVO;
 import hieplt.popularmovie.models.vos.ReviewVO;
 import hieplt.popularmovie.models.vos.TrailerVO;
@@ -116,6 +119,16 @@ public class DetailFragment extends Fragment {
                 mMovieVO = Parcels.unwrap(getArguments().getParcelable(Constants.EXTRA_DISCOVER_MOVIE));
 
                 if (mMovieVO != null) {
+
+                    Cursor c = getActivity().getContentResolver().query(MovieORMContract.CONTENT_URI, null,
+                            "_ID = ?", new String[]{String.valueOf(mMovieVO.getId())}, null);
+
+                    if (c.getCount() <= 0) {
+                        mCbFavorite.setChecked(false);
+                    } else {
+                        mCbFavorite.setChecked(true);
+                    }
+
                     mTvTitle.setText(mMovieVO.getTitle());
                     Picasso.with(mContext).load(mMovieVO.getThumbnailsURL()).into(mIvPoster);
                     mTvReleaseDate.setText(mMovieVO.getReleaseDate());
@@ -267,17 +280,44 @@ public class DetailFragment extends Fragment {
         }
     }
 
-    @CheckedChange(R.id.item_movie_vote_favorite_checkbox)
-    void onMovieFavoriteClicked(CompoundButton favorite, boolean isChecked) {
+    @Click(R.id.item_movie_vote_favorite_checkbox)
+    void onMovieFavoriteClicked(View clickedView) {
         Log.i(LOG_TAG, "onMovieFavoriteClicked");
         int noticeMsg;
+        boolean isChecked = ((CheckBox) clickedView).isChecked();
 
         if (isChecked) {
+            Cursor c = getActivity().getContentResolver().query(MovieORMContract.CONTENT_URI, null,
+                    "_ID = ?", new String[]{String.valueOf(mMovieVO.getId())}, null);
+
+            if (c.getCount() <= 0) {
+                ContentValues values = new ContentValues();
+                values.clear();
+                values.put(MovieORMContract._ID, mMovieVO.getId());
+                values.put(MovieORMContract.TITLE, mMovieVO.getTitle());
+                values.put(MovieORMContract.PLOTSYNOPSIS, mMovieVO.getPlotSynopsis());
+                values.put(MovieORMContract.RELEASEDATE, mMovieVO.getReleaseDate());
+                values.put(MovieORMContract.THUMBNAILSURL, mMovieVO.getThumbnailsURL());
+                values.put(MovieORMContract.VOTEAVERAGE, mMovieVO.getVoteAverage());
+                getActivity().getContentResolver().insert(MovieORMContract.CONTENT_URI, values);
+
+            } else {
+                mCbFavorite.setChecked(false);
+
+                // Temporary
+                getActivity().getContentResolver().delete(MovieORMContract.CONTENT_URI,
+                        "_ID = ?", new String[]{String.valueOf(mMovieVO.getId())});
+
+                noticeMsg = R.string.detail_msg_favorite_existed;
+            }
+
             noticeMsg = R.string.detail_msg_favorite_added;
         } else {
             noticeMsg = R.string.detail_msg_favorite_removed;
         }
 
-        Snackbar.make(getView(), noticeMsg, Snackbar.LENGTH_SHORT).show();
+        if (getView() != null) {
+            Snackbar.make(getView(), noticeMsg, Snackbar.LENGTH_SHORT).show();
+        }
     }
 }

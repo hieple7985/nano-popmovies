@@ -1,14 +1,17 @@
 package hieplt.popularmovie.activities;
 
 import android.content.ActivityNotFoundException;
+import android.content.ContentValues;
 import android.content.Context;
 import android.content.Intent;
+import android.database.Cursor;
 import android.net.Uri;
 import android.support.design.widget.Snackbar;
 import android.util.Log;
 import android.view.Menu;
+import android.view.MenuItem;
+import android.view.View;
 import android.widget.CheckBox;
-import android.widget.CompoundButton;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
@@ -20,7 +23,7 @@ import com.squareup.picasso.Picasso;
 import org.androidannotations.annotations.AfterViews;
 import org.androidannotations.annotations.Background;
 import org.androidannotations.annotations.Bean;
-import org.androidannotations.annotations.CheckedChange;
+import org.androidannotations.annotations.Click;
 import org.androidannotations.annotations.EActivity;
 import org.androidannotations.annotations.Fullscreen;
 import org.androidannotations.annotations.ItemClick;
@@ -41,6 +44,7 @@ import hieplt.popularmovie.bases.PopMovieActivityBase;
 import hieplt.popularmovie.commons.Constants;
 import hieplt.popularmovie.models.gsons.MovieReviewGSON;
 import hieplt.popularmovie.models.gsons.MovieTrailerGSON;
+import hieplt.popularmovie.models.orms.MovieORMContract;
 import hieplt.popularmovie.models.vos.MovieVO;
 import hieplt.popularmovie.models.vos.ReviewVO;
 import hieplt.popularmovie.models.vos.TrailerVO;
@@ -105,10 +109,14 @@ public class DetailActivity extends PopMovieActivityBase {
     // Content Provider
     // TMDBProvider mTMDBProvider;
 
-    @AfterViews
-    void initViews() {
+    // Mode Detection
+    boolean mIsTablet = false;
 
+    @AfterViews
+    void afterViews() {
         mContext = getApplicationContext();
+
+        mIsTablet = getResources().getBoolean(R.bool.isTablet);
 
         onSetupSupportActionBar(mToolbar);
 
@@ -117,6 +125,16 @@ public class DetailActivity extends PopMovieActivityBase {
         getSupportActionBar().setTitle(R.string.screen_name_discover_detail);
 
         mMovieVO = Parcels.unwrap(getIntent().getParcelableExtra(Constants.EXTRA_DISCOVER_MOVIE));
+
+        Cursor c = getContentResolver().query(MovieORMContract.CONTENT_URI, null,
+                "_ID = ?", new String[] { String.valueOf(mMovieVO.getId()) }, null);
+
+        if (c.getCount() <= 0) {
+            mCbFavorite.setChecked(false);
+        } else {
+            mCbFavorite.setChecked(true);
+        }
+
         mTvTitle.setText(mMovieVO.getTitle());
         Picasso.with(getApplicationContext()).load(mMovieVO.getThumbnailsURL()).into(mIvPoster);
         mTvReleaseDate.setText(mMovieVO.getReleaseDate());
@@ -260,28 +278,56 @@ public class DetailActivity extends PopMovieActivityBase {
                 intent.putExtra("VIDEO_ID", videoId);
                 startActivity(intent);
             } catch (ActivityNotFoundException ex) {
-                Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse("http://www.youtube.com/watch?v=" + videoId));
+                Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(Constants.YOU_TUBE_VIDEO_URL + videoId));
                 startActivity(intent);
             }
         }
     }
 
-    @CheckedChange(R.id.item_movie_vote_favorite_checkbox)
-    void onMovieFavoriteClicked(CompoundButton favorite, boolean isChecked) {
+    @Click(R.id.item_movie_vote_favorite_checkbox)
+    void onMovieFavoriteClicked(View clickedView) {
         Log.i(LOG_TAG, "onMovieFavoriteClicked");
         int noticeMsg;
+        boolean isChecked = ((CheckBox) clickedView).isChecked();
 
         if (isChecked) {
-            noticeMsg = R.string.detail_msg_favorite_added;
+
+            Cursor c = getContentResolver().query(MovieORMContract.CONTENT_URI, null,
+                "_ID = ?", new String[] { String.valueOf(mMovieVO.getId()) }, null);
+
+            if (c.getCount() <= 0) {
+                ContentValues values = new ContentValues();
+                values.clear();
+                values.put(MovieORMContract._ID, mMovieVO.getId());
+                values.put(MovieORMContract.TITLE, mMovieVO.getTitle());
+                values.put(MovieORMContract.PLOTSYNOPSIS, mMovieVO.getPlotSynopsis());
+                values.put(MovieORMContract.RELEASEDATE, mMovieVO.getReleaseDate());
+                values.put(MovieORMContract.THUMBNAILSURL, mMovieVO.getThumbnailsURL());
+                values.put(MovieORMContract.VOTEAVERAGE, mMovieVO.getVoteAverage());
+                getContentResolver().insert(MovieORMContract.CONTENT_URI, values);
+
+                noticeMsg = R.string.detail_msg_favorite_added;
+            } else {
+                mCbFavorite.setChecked(false);
+
+                // Temporary
+                getContentResolver().delete(MovieORMContract.CONTENT_URI,
+                        "_ID = ?", new String[]{String.valueOf(mMovieVO.getId())});
+
+                noticeMsg = R.string.detail_msg_favorite_existed;
+            }
+
         } else {
+
+            getContentResolver().delete(MovieORMContract.CONTENT_URI,
+                    "_ID = ?", new String[] {String.valueOf(mMovieVO.getId())});
+
             noticeMsg = R.string.detail_msg_favorite_removed;
         }
 
-        Snackbar.make(getCurrentFocus(), noticeMsg, Snackbar.LENGTH_SHORT).show();
-
-        // mMovieVO
-
-        // mTMDBProvider.insert()
+        if (getCurrentFocus() != null) {
+            Snackbar.make(getCurrentFocus(), noticeMsg, Snackbar.LENGTH_SHORT).show();
+        }
     }
 
     // ------------------------------------------------------------------------
@@ -289,7 +335,30 @@ public class DetailActivity extends PopMovieActivityBase {
     // ------------------------------------------------------------------------
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
+        // Inflate the menu; this adds items to the action bar if it is present.
+        getMenuInflater().inflate(R.menu.menu_share, menu);
+
         return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        // Handle action bar item clicks here. The action bar will
+        // automatically handle clicks on the Home/Up button, so long
+        // as you specify a parent activity in AndroidManifest.xml.
+        int id = item.getItemId();
+
+        if (!mIsTablet) {
+            if (id == R.id.action_share) {
+                Intent intent = new Intent(Intent.ACTION_SEND);
+                intent.setType("text/plain");
+                intent.putExtra(Intent.EXTRA_TEXT, Constants.YOU_TUBE_VIDEO_URL + mTrailerVOs.get(0).getKey());
+                intent.putExtra(android.content.Intent.EXTRA_SUBJECT, mMovieVO.getTitle());
+                startActivity(Intent.createChooser(intent, getResources().getString(R.string.action_share)));
+            }
+        }
+
+        return super.onOptionsItemSelected(item);
     }
 
     @OptionsItem(android.R.id.home)
