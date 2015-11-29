@@ -14,100 +14,11 @@
 
         <android.support.v7.widget.Toolbar android:id="@+id/toolbar"
             android:layout_width="match_parent" android:layout_height="?attr/actionBarSize"
-            android:background="?attr/colorPrimary" app:popupTheme="@style/AppTheme.PopupOverlay" />
+            android:background="@android:color/transparent" app:popupTheme="@style/AppTheme.PopupOverlay" />
 
     </android.support.design.widget.AppBarLayout>
 
-    <ScrollView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/ablayout">
-
-        <RelativeLayout
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:isScrollContainer="true">
-
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="@dimen/activity_discover_detail_movie_title_box_height"
-                android:text="Movie Title"
-                android:id="@+id/item_movie_title"
-                android:paddingLeft="32dp"
-                android:textSize="32dp"
-                android:textColor="@color/primary_text_default_material_dark"
-                android:background="@color/colorAccent"
-                android:gravity="center_vertical"
-
-                android:layout_alignParentTop="true"
-                android:layout_alignParentLeft="true"
-                android:layout_alignParentStart="true" />
-
-            <LinearLayout
-                android:orientation="horizontal"
-                android:layout_width="fill_parent"
-                android:layout_height="wrap_content"
-                android:layout_below="@+id/item_movie_title"
-                android:id="@+id/linearLayout">
-
-                <ImageView
-                    android:layout_width="@android:dimen/thumbnail_width"
-                    android:layout_height="@dimen/activity_discover_detail_movie_poster_height"
-                    android:layout_margin="4dp"
-                    android:id="@+id/item_movie_poster" />
-
-                <LinearLayout
-                    android:orientation="vertical"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:layout_margin="4dp"
-                    android:padding="4dp">
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:textAppearance="@android:style/TextAppearance.DeviceDefault.Medium"
-                        android:text="Release Date"
-                        android:textStyle="bold"
-                        android:id="@+id/item_movie_release_date_label" />
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:textAppearance="?android:attr/textAppearanceSmall"
-                        android:text="2015-11-15"
-                        android:id="@+id/item_movie_release_date_value" />
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:textAppearance="@android:style/TextAppearance.DeviceDefault.Medium"
-                        android:text="Vote Average"
-                        android:layout_marginTop="24dp"
-                        android:textStyle="bold"
-                        android:id="@+id/item_movie_vote_average_label" />
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:textAppearance="?android:attr/textAppearanceSmall"
-                        android:text="6.8"
-                        android:id="@+id/item_movie_vote_average_value" />
-
-                </LinearLayout>
-            </LinearLayout>
-
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:textAppearance="?android:attr/textAppearanceMedium"
-                android:text="Plot Synopsis"
-                android:id="@+id/item_movie_plot_synopsis"
-                android:layout_margin="8dp"
-                android:layout_below="@+id/linearLayout"
-                android:layout_centerHorizontal="true" />
-
-        </RelativeLayout>
-    </ScrollView>
+    <include layout="@layout/inc_detail" android:layout_below="@+id/ablayout"
+        android:layout_width="wrap_content" android:layout_height="wrap_content" />
 
 </RelativeLayout>

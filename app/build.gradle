@@ -1,8 +1,8 @@
-apply plugin: 'com.android.application'
-
 buildscript {
     repositories {
-        jcenter()
+        mavenCentral()
+        // mavenLocal()
+        // jcenter()
     }
     dependencies {
         classpath 'com.neenbedankt.gradle.plugins:android-apt:1.4'
@@ -11,6 +11,7 @@ buildscript {
     }
 }
 
+apply plugin: 'com.android.application'
 apply plugin: 'com.neenbedankt.android-apt'
 
 android {
@@ -20,7 +21,7 @@ android {
     defaultConfig {
         applicationId "hieplt.popularmovie"
         minSdkVersion 14
-        targetSdkVersion 21
+        targetSdkVersion 14
         versionCode 1
         versionName "1.0"
     }
@@ -30,29 +31,15 @@ android {
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
     }
-//    lintOptions {
-//        disable 'InvalidPackage'
-//    }
-//    packagingOptions {
-//        // Exclude file to avoid
-//        // Error: Duplicate files during packaging of APK
-//        exclude 'META-INF/services/javax.annotation.processing.Processor'
-//    }
-//    productFlavors {
-//    }
+
+    lintOptions {
+        abortOnError false
+    }
 }
 
-//repositories {
-//    maven { url 'https://raw.githubusercontent.com/Goddchen/mvn-repo/master/' }
-//    maven { url "http://repo.commonsware.com/" }
-//    maven { url 'http://maven.livotovlabs.pro/content/groups/public' }
-//    maven { url 'https://maven.fabric.io/public' }
-//
-//    mavenLocal()
-//    mavenCentral()
-//}
-
 def AAVersion = '3.3.2'
+def OCPVersion = '1.0.4'
+def ormliteVersion = '4.48'
 
 dependencies {
 
@@ -72,6 +59,17 @@ dependencies {
 
     compile "org.parceler:parceler-api:1.0.4"
     apt "org.parceler:parceler:1.0.4"
+
+    compile 'com.facebook.stetho:stetho:1.2.0'
+    compile 'com.facebook.stetho:stetho-urlconnection:1.2.0'
+    compile 'com.squareup:javapoet:1.4.0'
+
+    compile "com.j256.ormlite:ormlite-core:$ormliteVersion"
+    compile "com.j256.ormlite:ormlite-android:$ormliteVersion"
+
+    compile "com.tojc.ormlite.android:ormlite-content-provider-library:$OCPVersion@aar" // @aar or @jar
+    apt "com.tojc.ormlite.android:ormlite-content-provider-compiler:$OCPVersion"
+
 }
 
 apt {

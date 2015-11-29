@@ -17,8 +17,31 @@
 
     </android.support.design.widget.AppBarLayout>
 
+    <LinearLayout
+        android:orientation="horizontal"
+        android:layout_width="match_parent"
+        android:layout_below="@+id/ablayout"
+        android:layout_height="match_parent"
+        android:weightSum="2">
 
-    <include layout="@layout/inc_discover" android:layout_below="@+id/ablayout"
-        android:layout_width="wrap_content" android:layout_height="wrap_content"/>
+        <FrameLayout
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent"
+            android:layout_weight="1"
+            android:id="@+id/tablet_fragment_discover"
+            android:tag="tablet_fragment_discover">
+
+        </FrameLayout>
+
+        <FrameLayout
+            android:id="@+id/tablet_fragment_detail"
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent"
+            android:layout_weight="1"
+            android:tag="tablet_fragment_detail">
+
+        </FrameLayout>
+
+    </LinearLayout>
 
 </RelativeLayout>
