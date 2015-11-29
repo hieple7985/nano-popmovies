@@ -301,7 +301,10 @@ public class DetailFragment extends Fragment {
                 values.put(MovieORMContract.VOTEAVERAGE, mMovieVO.getVoteAverage());
                 getActivity().getContentResolver().insert(MovieORMContract.CONTENT_URI, values);
 
+                noticeMsg = R.string.detail_msg_favorite_added;
             } else {
+
+                // In case of data got wrong.
                 mCbFavorite.setChecked(false);
 
                 // Temporary
@@ -313,6 +316,10 @@ public class DetailFragment extends Fragment {
 
             noticeMsg = R.string.detail_msg_favorite_added;
         } else {
+
+            getActivity().getContentResolver().delete(MovieORMContract.CONTENT_URI,
+                    "_ID = ?", new String[] {String.valueOf(mMovieVO.getId())});
+
             noticeMsg = R.string.detail_msg_favorite_removed;
         }
 

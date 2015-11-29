@@ -24,7 +24,7 @@
                 android:layout_height="@dimen/activity_discover_detail_movie_title_box_height"
                 android:text="Movie Title"
                 android:id="@+id/item_movie_title"
-                android:paddingLeft="32dp"
+                android:paddingLeft="16dp"
                 android:textSize="32dp"
                 android:textColor="@color/primary_text_default_material_dark"
                 android:background="@color/colorAccent"
@@ -44,7 +44,7 @@
                 <ImageView
                     android:layout_width="@dimen/activity_discover_detail_movie_poster_width"
                     android:layout_height="@dimen/activity_discover_detail_movie_poster_height"
-                    android:layout_margin="4dp"
+                    android:layout_margin="16dp"
                     android:id="@+id/item_movie_poster" />
 
                 <LinearLayout

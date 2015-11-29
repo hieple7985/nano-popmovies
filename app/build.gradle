@@ -21,7 +21,7 @@ android {
     defaultConfig {
         applicationId "hieplt.popularmovie"
         minSdkVersion 14
-        targetSdkVersion 21
+        targetSdkVersion 14
         versionCode 1
         versionName "1.0"
     }
@@ -33,28 +33,9 @@ android {
     }
 
     lintOptions {
-//        disable 'InvalidPackage'
         abortOnError false
     }
-
-//    packagingOptions {
-//        // Exclude file to avoid
-//        // Error: Duplicate files during packaging of APK
-//        exclude 'META-INF/services/javax.annotation.processing.Processor'
-//    }
-//    productFlavors {
-//    }
 }
-
-//repositories {
-//    maven { url 'https://raw.githubusercontent.com/Goddchen/mvn-repo/master/' }
-//    maven { url "http://repo.commonsware.com/" }
-//    maven { url 'http://maven.livotovlabs.pro/content/groups/public' }
-//    maven { url 'https://maven.fabric.io/public' }
-//
-//    mavenLocal()
-//    mavenCentral()
-//}
 
 def AAVersion = '3.3.2'
 def OCPVersion = '1.0.4'
@@ -87,7 +68,6 @@ dependencies {
     compile "com.j256.ormlite:ormlite-android:$ormliteVersion"
 
     compile "com.tojc.ormlite.android:ormlite-content-provider-library:$OCPVersion@aar" // @aar or @jar
-    // compile "com.tojc.ormlite.android:ormlite-content-provider-compiler:$OCPVersion" // jar only
     apt "com.tojc.ormlite.android:ormlite-content-provider-compiler:$OCPVersion"
 
 }

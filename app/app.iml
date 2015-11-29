@@ -104,8 +104,8 @@
     <orderEntry type="library" exported="" name="appcompat-v7-23.1.0" level="project" />
     <orderEntry type="library" exported="" name="ormlite-core-4.48" level="project" />
     <orderEntry type="library" exported="" name="javapoet-1.4.0" level="project" />
-    <orderEntry type="library" exported="" name="androidannotations-api-3.3.2" level="project" />
     <orderEntry type="library" exported="" name="jsr305-2.0.1" level="project" />
+    <orderEntry type="library" exported="" name="androidannotations-api-3.3.2" level="project" />
     <orderEntry type="library" exported="" name="parceler-api-1.0.4" level="project" />
     <orderEntry type="library" exported="" name="retrofit-1.5.1" level="project" />
     <orderEntry type="library" exported="" name="commons-cli-1.2" level="project" />
