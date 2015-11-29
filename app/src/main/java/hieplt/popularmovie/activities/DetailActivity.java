@@ -308,6 +308,8 @@ public class DetailActivity extends PopMovieActivityBase {
 
                 noticeMsg = R.string.detail_msg_favorite_added;
             } else {
+
+                // In case of data got wrong.
                 mCbFavorite.setChecked(false);
 
                 // Temporary
@@ -363,6 +365,6 @@ public class DetailActivity extends PopMovieActivityBase {
 
     @OptionsItem(android.R.id.home)
     void onHomeSelected() {
-        onBackPressed();
+        finish();
     }
 }

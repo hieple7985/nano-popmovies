@@ -15,7 +15,9 @@ import org.androidannotations.annotations.Background;
 import org.androidannotations.annotations.Bean;
 import org.androidannotations.annotations.EActivity;
 import org.androidannotations.annotations.Fullscreen;
+import org.androidannotations.annotations.InstanceState;
 import org.androidannotations.annotations.ItemClick;
+import org.androidannotations.annotations.OnActivityResult;
 import org.androidannotations.annotations.UiThread;
 import org.androidannotations.annotations.ViewById;
 import org.parceler.Parcels;
@@ -66,10 +68,17 @@ public class DiscoverActivity extends PopMovieActivityBase {
     // Mode Detection
     boolean mIsTablet = false;
 
+    @InstanceState
+    String mLastSortBy;
+
+    private static final int ACTIVITY_REQUEST_CODE = 0;
+
     @AfterViews
     void afterViews() {
 
         onSetupSupportActionBar(mToolbar);
+
+        mLastSortBy = TMDBDiscoverService.SORT_BY_POPULAR;
 
         mIsTablet = getResources().getBoolean(R.bool.isTablet);
         if (!mIsTablet) {
@@ -80,13 +89,13 @@ public class DiscoverActivity extends PopMovieActivityBase {
 
             mGvMovies.setAdapter(mDiscoverAdapter);
 
-            doLoadDataInBackground(TMDBDiscoverService.SORT_BY_POPULAR);
+            doLoadDataInBackground(mLastSortBy);
 
         } else {
 
             // Build Fragment
             Bundle args = new Bundle();
-            args.putString(Constants.EXTRA_DISCOVER_MODE, TMDBDiscoverService.SORT_BY_POPULAR);
+            args.putString(Constants.EXTRA_DISCOVER_MODE, mLastSortBy);
             DiscoverFragment_ discoverFragment_ = new DiscoverFragment_();
             discoverFragment_.setArguments(args);
 
@@ -225,7 +234,18 @@ public class DiscoverActivity extends PopMovieActivityBase {
         } else {
             Intent intent = new Intent(this, DetailActivity_.class);
             intent.putExtra(Constants.EXTRA_DISCOVER_MOVIE, Parcels.wrap(selectedMovie));
-            startActivity(intent);
+            startActivityForResult(intent, ACTIVITY_REQUEST_CODE);
+        }
+    }
+
+    @OnActivityResult(ACTIVITY_REQUEST_CODE)
+    void onResult(int resultCode) {
+        if (!mIsTablet) {
+            if (mLastSortBy.equalsIgnoreCase(TMDBDiscoverService.SORT_BY_FAVORITE)) {
+                doLoadFavoriteFromDatabaseInBackground();
+            } else {
+                doLoadDataInBackground(mLastSortBy);
+            }
         }
     }
 
@@ -238,10 +258,13 @@ public class DiscoverActivity extends PopMovieActivityBase {
 
         if (!mIsTablet) {
             if (id == R.id.action_popular) {
-                doLoadDataInBackground(TMDBDiscoverService.SORT_BY_POPULAR);
+                mLastSortBy = TMDBDiscoverService.SORT_BY_POPULAR;
+                doLoadDataInBackground(mLastSortBy);
             } else if (id == R.id.action_high_rate) {
-                doLoadDataInBackground(TMDBDiscoverService.SORT_BY_HIGHEST_RATE);
+                mLastSortBy = TMDBDiscoverService.SORT_BY_HIGHEST_RATE;
+                doLoadDataInBackground(mLastSortBy);
             } else if (id == R.id.action_favorite) {
+                mLastSortBy = TMDBDiscoverService.SORT_BY_FAVORITE;
                 doLoadFavoriteFromDatabaseInBackground();
             }
 
@@ -252,11 +275,14 @@ public class DiscoverActivity extends PopMovieActivityBase {
             Bundle args = new Bundle();
 
             if (id == R.id.action_popular) {
-                args.putString(Constants.EXTRA_DISCOVER_MODE, TMDBDiscoverService.SORT_BY_POPULAR);
+                mLastSortBy = TMDBDiscoverService.SORT_BY_POPULAR;
+                args.putString(Constants.EXTRA_DISCOVER_MODE, mLastSortBy);
             } else if (id == R.id.action_high_rate) {
-                args.putString(Constants.EXTRA_DISCOVER_MODE, TMDBDiscoverService.SORT_BY_HIGHEST_RATE);
+                mLastSortBy = TMDBDiscoverService.SORT_BY_HIGHEST_RATE;
+                args.putString(Constants.EXTRA_DISCOVER_MODE, mLastSortBy);
             } else if (id == R.id.action_favorite) {
-                args.putString(Constants.EXTRA_DISCOVER_MODE, TMDBDiscoverService.SORT_BY_FAVORITE);
+                mLastSortBy = TMDBDiscoverService.SORT_BY_FAVORITE;
+                args.putString(Constants.EXTRA_DISCOVER_MODE, mLastSortBy);
             }
 
             DiscoverFragment_ discoverFragment_ = new DiscoverFragment_();
