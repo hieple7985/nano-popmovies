@@ -20,7 +20,7 @@ The Popular Movies project is made and used for code reviewing in the Udacity An
 
 # Licence
 
-Copyright (C) 2015  Solokop - Popular Movies Project for Udacity Android Nanodegree
+Copyright (C) 2015 @hieple7985 - Popular Movies Project for Udacity Android Nanodegree
 
       Licensed under the Apache License, Version 2.0 (the "License");
       you may not use this file except in compliance with the License.
