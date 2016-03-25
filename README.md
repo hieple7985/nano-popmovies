@@ -21,7 +21,14 @@
 - [OrmLite](http://ormlite.com/)
 - [OrmLite Content Provider](https://github.com/jakenjarvis/Android-OrmLiteContentProvider)
 
-# Setup & Dependencies
+# Setup & Installation
+Step 1:
+
+      git clone https://github.com/hieple7985/nano-popmovies.git
+
+Step 2: [Import Project to Android Studio](http://developer.android.com/intl/ja/sdk/installing/migrate.html#migrate)
+
+# Dependencies
 - minSdkVersion 14
 - junit:junit:4.12
 - com.android.support:support-v4:23.1.0
