@@ -1,14 +1,17 @@
 # Popular Movies
+- Project 1 & 2: Udacity Movie Project (Stage 1 & 2) - [Udacity: Android Nanodegree](https://www.udacity.com/course/android-developer-nanodegree--nd801)
+- The Popular Movies project is made and used for code reviewing in the [Udacity: Android Nanodegree](https://www.udacity.com/course/android-developer-nanodegree--nd801) course for Movie Project 1 & 2 phases. It is the functional project version based on the project requirements.
 
-Udacity Movie Project (Stage 1 & 2)
-
-The Popular Movies project is made and used for code reviewing in the Udacity Android Nanodegree course for Movie Project 1 & 2 phases. It is the functional project version based on the project requirements.
+# Authors
+- Name: Hiep Le
+- Blog: http://blogs.solokop.com/en/
 
 # Third-party APIs
 - [TMDB](https://www.themoviedb.org/documentation/api?language=en)
 
-# Third-party Libraries
+# Third-party Libraries & Credits
 
+- [Android SDK & Android Studio](http://developer.android.com/intl/ja/sdk/index.html)
 - [Android Annotation](https://github.com/excilys/androidannotations)
 - [Retrofit](https://github.com/square/retrofit)
 - [Picasso](http://square.github.io/picasso/)
@@ -17,6 +20,16 @@ The Popular Movies project is made and used for code reviewing in the Udacity An
 - [Parceler](https://github.com/johncarl81/parceler)
 - [OrmLite](http://ormlite.com/)
 - [OrmLite Content Provider](https://github.com/jakenjarvis/Android-OrmLiteContentProvider)
+
+# Setup & Dependencies
+- minSdkVersion 14
+- junit:junit:4.12
+- com.android.support:support-v4:23.1.0
+- com.android.support:appcompat-v7:23.1.0
+- com.android.support:design:23.1.0
+
+# Grade
+- Meet Specification on first time.
 
 # Licence
 
